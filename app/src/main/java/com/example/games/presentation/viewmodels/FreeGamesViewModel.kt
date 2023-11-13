@@ -20,9 +20,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FreeGamesViewModel @Inject constructor(private val freeGamesUseCases: FreeGamesUseCases):ViewModel() {
-    private val _freeGames = MutableStateFlow(FreeGameState())
-    val freeGames:StateFlow<FreeGameState>
-    get() = _freeGames
+    private val _freeGamesState = MutableStateFlow(FreeGameState())
+    val freeGamesState:StateFlow<FreeGameState>
+    get() = _freeGamesState
 
     private val _uiEffect = MutableSharedFlow<UiEffect>()
     val uiEffect: SharedFlow<UiEffect>
@@ -35,18 +35,18 @@ class FreeGamesViewModel @Inject constructor(private val freeGamesUseCases: Free
     private fun getAllFreeGames() = freeGamesUseCases().onEach{
           when(it){
               is Resource.Error->{
-                   _freeGames.value = FreeGameState().copy(
+                   _freeGamesState.value = FreeGameState().copy(
                        errorMsg = it.msg
                    )
                   _uiEffect.emit(UiEffect.ShowSnackBar(it.msg.toString()))
               }
               is Resource.Loading->{
-                  _freeGames.value = FreeGameState().copy(
+                  _freeGamesState.value = FreeGameState().copy(
                       isLoading =true
                   )
               }
               is Resource.Success->{
-                  _freeGames.value = FreeGameState().copy(
+                  _freeGamesState.value = FreeGameState().copy(
                       freeGames = it.data
                   )
               }

@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
+import com.example.games.presentation.navigation.Navigation
 import com.example.games.presentation.ui.theme.GamesTheme
 import com.example.games.presentation.viewmodels.FreeGamesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,8 +30,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val freeGameViewModel = hiltViewModel<FreeGamesViewModel>()
-                    val state = freeGameViewModel.freeGames.collectAsStateWithLifecycle()
+                    val navController = rememberNavController()
+                    Navigation(navController = navController)
                 }
             }
         }
