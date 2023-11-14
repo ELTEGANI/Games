@@ -1,5 +1,6 @@
 package com.example.games.presentation.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,12 +20,15 @@ import com.example.games.domain.model.FreeGames
 
 
 @Composable
-fun FreeGameItem(modifier: Modifier,freeGames: FreeGames){
+fun FreeGameItem(modifier: Modifier,freeGames: FreeGames,onItemClicked:(FreeGames)->Unit){
     Column(modifier = Modifier
         .padding(16.dp)
         .fillMaxWidth()) {
         Card (
-            elevation = CardDefaults.cardElevation(4.dp), shape = RoundedCornerShape(16.dp)
+            elevation = CardDefaults.cardElevation(4.dp), shape = RoundedCornerShape(16.dp),
+            modifier = Modifier.clickable {
+                onItemClicked(freeGames)
+            }
         ){
          Column(modifier= Modifier
              .padding(8.dp)
