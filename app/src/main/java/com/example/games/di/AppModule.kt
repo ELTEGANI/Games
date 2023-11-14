@@ -8,9 +8,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 
@@ -19,14 +22,27 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideRetrofitInstance(): Retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(BASE_URL)
-        .build()
+    fun provideRetrofitInstance(): Retrofit {
+        val httpInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BASIC
+        }
+        val httpClient = OkHttpClient().newBuilder().apply {
+            addInterceptor(httpInterceptor)
+        }
+        httpClient.apply {
+            readTimeout(60, TimeUnit.SECONDS)
+        }
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(httpClient.build())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 
     @Provides
     @Singleton
-    fun provideFreeGameApi(retrofit: Retrofit):FreeGamesApi = retrofit.create(FreeGamesApi::class.java)
+    fun provideFreeGameApi(retrofit: Retrofit):FreeGamesApi =
+        retrofit.create(FreeGamesApi::class.java)
 
 
     @Provides

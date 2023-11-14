@@ -53,11 +53,5 @@ class FreeGamesViewModel @Inject constructor(private val freeGamesUseCases: Free
           }
     }.launchIn(viewModelScope)
 
-    fun onEvent(uiEvent: UiEvent){
-        when(uiEvent){
-            UiEvent.NavigateToDetailScreen->{
-
-            }
-        }
-    }
+    
 }
