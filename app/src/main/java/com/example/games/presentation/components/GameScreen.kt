@@ -8,15 +8,19 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import com.example.games.presentation.navigation.screens.Screen
 import com.example.games.presentation.state.FreeGameState
 
 
 @Composable
-fun GameScreen(freeGameState: FreeGameState,modifier: Modifier){
+fun GameScreen(freeGameState: FreeGameState, modifier: Modifier, navController: NavHostController){
    if(freeGameState.freeGames?.isNotEmpty()!!){
      LazyColumn{
-         items(freeGameState.freeGames){
-             FreeGameItem(modifier,it)
+         items(freeGameState.freeGames){freeGamesList->
+             FreeGameItem(modifier, freeGames = freeGamesList, onItemClicked = {
+                 navController.navigate(Screen.GameDetialsScreen.route+"/${freeGamesList.id}")
+             })
          }
      }
    }else if(freeGameState.isLoading){
