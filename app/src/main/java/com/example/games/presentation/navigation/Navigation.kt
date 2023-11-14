@@ -5,7 +5,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -19,6 +18,7 @@ import com.example.games.presentation.components.FreeGameDetailScreen
 import com.example.games.presentation.components.GameScreen
 import com.example.games.presentation.navigation.screens.Screen
 import com.example.games.presentation.state.UiEffect
+import com.example.games.presentation.viewmodels.FreeGamesDetailsViewModel
 import com.example.games.presentation.viewmodels.FreeGamesViewModel
 import kotlinx.coroutines.flow.collectLatest
 
@@ -49,7 +49,18 @@ fun Navigation(navController: NavHostController){
             }
 
             composable(Screen.GameDetialsScreen.route+"/{id}"){
-                FreeGameDetailScreen()
+                val freeGamesDetailsViewModel = hiltViewModel<FreeGamesDetailsViewModel>()
+                val freeGamesDetailsState = freeGamesDetailsViewModel.freeGamesDetailsState.collectAsStateWithLifecycle()
+                FreeGameDetailScreen(freeGameState = freeGamesDetailsState.value,modifier = Modifier)
+                LaunchedEffect(key1 =true){
+                    freeGamesDetailsViewModel.uiEffect.collectLatest {res->
+                        when(res){
+                            is UiEffect.ShowSnackBar -> {
+                                snackBarHostState.showSnackbar(res.msg)
+                            }
+                        }
+                    }
+                }
             }
         }
     }

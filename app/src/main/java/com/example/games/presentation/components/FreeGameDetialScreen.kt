@@ -2,12 +2,15 @@ package com.example.games.presentation.components
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.games.presentation.viewmodels.FreeGamesDetailsViewModel
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import com.example.games.presentation.state.FreeGameDetailState
+import com.example.games.presentation.state.FreeGameState
 
 @Composable
 fun FreeGameDetailScreen(
-    freeGamesDetailsViewModel: FreeGamesDetailsViewModel = hiltViewModel()
+    freeGameState : FreeGameDetailState,
+    modifier: Modifier,
 ) {
-    Text(text = "games")
+    Text(text = "title:${freeGameState.freeGamesDetail?.title?:""}")
 }
