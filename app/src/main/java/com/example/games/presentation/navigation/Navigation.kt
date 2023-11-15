@@ -35,7 +35,6 @@ fun Navigation(navController: NavHostController){
             composable(Screen.GameScreen.route){
                 val freeGameViewModel = hiltViewModel<FreeGamesViewModel>()
                 val freeGamesState = freeGameViewModel.freeGamesState.collectAsStateWithLifecycle()
-
                 GameScreen(freeGameState = freeGamesState.value, modifier = Modifier,navController)
                 LaunchedEffect(key1 =true){
                     freeGameViewModel.uiEffect.collectLatest {
